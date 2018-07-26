@@ -7,4 +7,10 @@ import android.support.v4.app.Fragment;
  */
 
 public class BaseFragment extends Fragment {
+
+    protected FunctionsManager functionsManager;
+
+    public void setFunctionManager(FunctionsManager functionsManager) {
+        this.functionsManager = functionsManager;
+    }
 }

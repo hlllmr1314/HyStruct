@@ -21,4 +21,4 @@
 3. 有参，无返回值（FunctionOnlyParam）
 4. 有参，有返回值（FunctionParamAndResult）
 ###### 针对这4个情况我们可以设计一下我们的接口Function，首先functionName是每个函数的唯一标示，所以必须要有唯一性。再根据上面的4个情况需要设计它的一个函数体。
-
+###### Fragment在使用之前需要进行绑定
