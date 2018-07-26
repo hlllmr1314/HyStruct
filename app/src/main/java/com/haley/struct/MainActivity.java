@@ -10,6 +10,7 @@ import com.haley.struct.fragcomm.FunctionNoParamNoResult;
 import com.haley.struct.fragcomm.FunctionOnlyParam;
 import com.haley.struct.fragcomm.FunctionOnlyResult;
 import com.haley.struct.fragcomm.FunctionParamAndResult;
+import com.haley.struct.fragcomm.FunctionsManager;
 
 import static com.haley.struct.TestFragment.INTERFACE2;
 import static com.haley.struct.TestFragment.INTERFACE3;
@@ -27,10 +28,9 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    public void setFunctionsForFragment(String tag) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(tag);
-        fragment.setFunctionManager(functionsManager
+    @Override
+    public FunctionsManager getFunctionsManagerSupport() {
+        return functionsManager
                 .addFunction(new FunctionNoParamNoResult(TestFragment.INTERFACE1) {
                     @Override
                     public void function() {
@@ -56,8 +56,9 @@ public class MainActivity extends BaseActivity {
                         Toast.makeText(getApplicationContext(), "ParamAndResult " + s, Toast.LENGTH_LONG).show();
                         return s + " hehe";
                     }
-                }));
+                });
     }
+
 
     @Override
     protected void onDestroy() {
