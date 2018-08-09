@@ -142,22 +142,23 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
                 field.setAccessible(true);
 
                 value = field.get(entity);
-                if (value instanceof String) {
-                    contentValues.put(key, (String) value);
-                } else if (value instanceof Integer) {
-                    contentValues.put(key, (Integer) value);
-                } else if (value instanceof Double) {
-                    contentValues.put(key, (Double) value);
-                } else if (value instanceof Long) {
-                    contentValues.put(key, (Long) value);
-                } else if (value instanceof byte[]) {
-                    contentValues.put(key, (byte[]) value);
-                } else if (value instanceof Float) {
-                    contentValues.put(key, (Float) value);
-                } else {
-                    LogUtil.w(value.getClass() + "类型不支持");
+                if (value != null) {
+                    if (value instanceof String) {
+                        contentValues.put(key, (String) value);
+                    } else if (value instanceof Integer) {
+                        contentValues.put(key, (Integer) value);
+                    } else if (value instanceof Double) {
+                        contentValues.put(key, (Double) value);
+                    } else if (value instanceof Long) {
+                        contentValues.put(key, (Long) value);
+                    } else if (value instanceof byte[]) {
+                        contentValues.put(key, (byte[]) value);
+                    } else if (value instanceof Float) {
+                        contentValues.put(key, (Float) value);
+                    } else {
+                        LogUtil.w(value.getClass() + "类型不支持");
+                    }
                 }
-
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();

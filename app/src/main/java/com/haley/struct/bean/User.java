@@ -7,10 +7,13 @@ import com.haley.struct.ormdb.annotation.HyTable;
  * Created by haley on 2018/7/26.
  */
 
-@HyTable("t_user")
+@HyTable("t_user3")
 public class User {
 
-    @HyField("user_name")
+    @HyField(value = "user_id", isPrimaryKey = true, isAutoIncrement = true)
+    private Integer userId;
+
+    @HyField(value = "user_name", isNotNull = true)
     private String userName;
 
     @HyField("user_password")
@@ -30,5 +33,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

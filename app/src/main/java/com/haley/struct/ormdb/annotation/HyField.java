@@ -12,5 +12,30 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface HyField {
+    /**
+     * 字段名
+     *
+     * @return
+     */
     String value();
+
+    /**
+     * 是否为主键
+     *
+     * @return
+     */
+    boolean isPrimaryKey() default false;
+
+    /**
+     * 自增ID
+     * @return
+     */
+    boolean isAutoIncrement() default false;
+
+    /**
+     * 是否可以为null
+     *
+     * @return true:不可以为null false:可以为null
+     */
+    boolean isNotNull() default false;
 }

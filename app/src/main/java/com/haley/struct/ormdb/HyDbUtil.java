@@ -7,6 +7,7 @@ import com.haley.struct.ormdb.annotation.HyField;
 import com.haley.struct.ormdb.annotation.HyTable;
 import com.haley.struct.ormdb.exception.HyCreateTableException;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
@@ -40,20 +41,22 @@ public final class HyDbUtil {
         stringBuffer.append(tableName);
         stringBuffer.append(" (");
 
+        HyField annotation;
         for (Field field : tbClass.getDeclaredFields()) {
             if (field.isAnnotationPresent(HyField.class)) {
+                annotation = field.getAnnotation(HyField.class);
                 if (field.getType() == String.class) {
-                    stringBuffer.append(field.getAnnotation(HyField.class).value() + " TEXT,");
+                    stringBuffer.append(annotation.value() + " TEXT" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
                 } else if (field.getType() == Integer.class) {
-                    stringBuffer.append(field.getAnnotation(HyField.class).value() + " INTEGER,");
+                    stringBuffer.append(annotation.value() + " INTEGER" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
                 } else if (field.getType() == Double.class) {
-                    stringBuffer.append(field.getAnnotation(HyField.class).value() + " DOUBLE,");
+                    stringBuffer.append(annotation.value() + " DOUBLE" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
                 } else if (field.getType() == Long.class) {
-                    stringBuffer.append(field.getAnnotation(HyField.class).value() + " BIGINT,");
+                    stringBuffer.append(annotation.value() + " BIGINT" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
                 } else if (field.getType() == byte[].class) {
-                    stringBuffer.append(field.getAnnotation(HyField.class).value() + " BLOB,");
+                    stringBuffer.append(annotation.value() + " BLOB" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
                 } else if (field.getType() == Float.class) {
-                    stringBuffer.append(field.getAnnotation(HyField.class).value() + " FLOAT,");
+                    stringBuffer.append(annotation.value() + " FLOAT" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
                 } else {
                     LogUtil.w(field.getType() + "类型不支持");
                 }
@@ -68,6 +71,18 @@ public final class HyDbUtil {
 
         String sql = stringBuffer.toString();
         return sql;
+    }
+
+    private static String isPrimaryKey(HyField annotation) {
+        return annotation.isPrimaryKey() ? " PRIMARY KEY " : "";
+    }
+
+    private static String isNotNull(HyField annotation) {
+        return annotation.isNotNull() ? " NOT NULL " : "";
+    }
+
+    private static String isAutoIncrement(HyField annotation) {
+        return annotation.isAutoIncrement() ? " AUTOINCREMENT " : "";
     }
 
     /**
