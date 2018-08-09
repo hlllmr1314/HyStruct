@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
+import com.haley.struct.bean.User;
 import com.haley.struct.fragcomm.BaseActivity;
 import com.haley.struct.fragcomm.BaseFragment;
 import com.haley.struct.fragcomm.FunctionNoParamNoResult;
@@ -11,6 +12,9 @@ import com.haley.struct.fragcomm.FunctionOnlyParam;
 import com.haley.struct.fragcomm.FunctionOnlyResult;
 import com.haley.struct.fragcomm.FunctionParamAndResult;
 import com.haley.struct.fragcomm.FunctionsManager;
+import com.haley.struct.ormdb.HyBaseDao;
+import com.haley.struct.ormdb.HyDao;
+import com.haley.struct.ormdb.HyDbFactory;
 
 import static com.haley.struct.TestFragment.INTERFACE2;
 import static com.haley.struct.TestFragment.INTERFACE3;
@@ -25,6 +29,14 @@ public class MainActivity extends BaseActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.content, TestFragment.newInstance(), TestFragment.class.getName()).commit();
+
+
+        HyBaseDao<User, Long> baseDao = HyDbFactory.getInstance().getBaseDao(User.class);
+
+        User user = new User();
+        user.setUserName("ss");
+        user.setPassword("pp");
+        baseDao.save(user);
 
     }
 

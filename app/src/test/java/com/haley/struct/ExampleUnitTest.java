@@ -1,5 +1,10 @@
 package com.haley.struct;
 
+import android.util.Log;
+
+import com.haley.struct.bean.User;
+import com.haley.struct.ormdb.HyDbUtil;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,5 +18,21 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void validCreatTableSql() throws Exception {
+
+        String sql = HyDbUtil.getCreateTableSql(User.class);
+        System.out.print("sql:" + sql);
+        assertNotNull(sql);
+    }
+
+    @Test
+    public void validQueryEmptyTableSql() throws Exception {
+
+        String sql = HyDbUtil.getQueryEmptyTableSql(User.class);
+        System.out.print("sql:" + sql);
+        assertNotNull(sql);
     }
 }
