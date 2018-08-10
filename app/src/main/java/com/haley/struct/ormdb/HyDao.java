@@ -1,7 +1,5 @@
 package com.haley.struct.ormdb;
 
-import android.content.Context;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public interface HyDao<T, ID extends Serializable> {
      * @param var1
      * @return
      */
-    <T> Iterable<T> save(Iterable<T> var1);
+     boolean save(Iterable<T> var1);
 
     /**
      * 查询全部

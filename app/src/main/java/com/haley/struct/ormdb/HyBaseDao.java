@@ -170,8 +170,23 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public Iterable save(Iterable var1) {
-        return null;
+    public boolean save(Iterable<T> var1) {
+        sqLiteDatabase.beginTransaction();
+        try {
+            Iterator<T> iterator = var1.iterator();
+            while (iterator.hasNext()) {
+                if (save(iterator.next()) > -1L) {
+                    return false;
+                }
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }
+        return true;
     }
 
     @Override

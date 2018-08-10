@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.haley.struct.fragcomm.BaseActivity;
 import com.haley.struct.fragcomm.BaseFragment;
 
 /**
@@ -19,7 +20,7 @@ public class TestFragment extends BaseFragment {
     public static final String INTERFACE2 = TestFragment.class.getName() + "OnlyParam";
     public static final String INTERFACE3 = TestFragment.class.getName() + "OnlyResult";
     public static final String INTERFACE4 = TestFragment.class.getName() + "PR";
-    private MainActivity mActivity;
+    private BaseActivity mActivity;
 
     public static TestFragment newInstance() {
         TestFragment fragment = new TestFragment();
@@ -50,9 +51,9 @@ public class TestFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof MainActivity) {
+        if (context instanceof BaseActivity) {
             //进行注册
-            mActivity = (MainActivity) context;
+            mActivity = (BaseActivity) context;
             mActivity.setFunctionsForFragment(getTag());
         }
     }
