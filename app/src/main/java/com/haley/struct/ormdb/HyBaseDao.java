@@ -11,12 +11,14 @@ import com.haley.struct.ormdb.annotation.HyField;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import static com.haley.struct.ormdb.HyDbUtil.getCreateTableSql;
 import static com.haley.struct.ormdb.HyDbUtil.getQueryEmptyTableSql;
+import static com.haley.struct.ormdb.HyDbUtil.getSelectAllSql;
 import static com.haley.struct.ormdb.HyDbUtil.getTableName;
 
 /**
@@ -143,6 +145,12 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
 
                 value = field.get(entity);
                 if (value != null) {
+
+                    //针对自增的属性，如果传入参数为0，则进行忽视
+                    if (field.getAnnotation(HyField.class).isAutoIncrement()) {
+                        continue;
+                    }
+
                     if (value instanceof String) {
                         contentValues.put(key, (String) value);
                     } else if (value instanceof Integer) {
@@ -164,7 +172,7 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
             e.printStackTrace();
         }
 
-        LogUtil.w(contentValues.toString());
+        LogUtil.w("getContentValues:" + contentValues.toString());
 
         return contentValues;
     }
@@ -191,11 +199,73 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
 
     @Override
     public List<T> findAll() {
+
+        Cursor cursor = sqLiteDatabase.rawQuery(getSelectAllSql(tbClass), new String[]{});
+        if (cursor != null) {
+            try {
+                List<T> lists = new ArrayList<>();
+                T entity;
+
+                String key;
+                Field field;
+                Map.Entry<String, Field> entry;
+                while (cursor.moveToNext()) {
+
+                    entity = tbClass.newInstance();
+
+                    Iterator<Map.Entry<String, Field>> iterator = arrayMap.entrySet().iterator();
+
+                    while (iterator.hasNext()) {
+                        entry = iterator.next();
+                        key = entry.getKey();
+                        field = entry.getValue();
+
+                        field.setAccessible(true);
+
+                        int columnIndex = cursor.getColumnIndex(key);
+
+                        if (field.getType() == String.class) {
+                            field.set(entity, cursor.getString(columnIndex));
+                        } else if (field.getType() == Integer.class) {
+                            field.set(entity, cursor.getInt(columnIndex));
+                        } else if (field.getType() == int.class) {
+                            field.setInt(entity, cursor.getInt(columnIndex));
+                        } else if (field.getType() == Double.class) {
+                            field.set(entity, cursor.getDouble(columnIndex));
+                        } else if (field.getType() == double.class) {
+                            field.setDouble(entity, cursor.getDouble(columnIndex));
+                        } else if (field.getType() == Long.class) {
+                            field.set(entity, cursor.getLong(columnIndex));
+                        } else if (field.getType() == long.class) {
+                            field.setLong(entity, cursor.getLong(columnIndex));
+                        } else if (field.getType() == Float.class) {
+                            field.set(entity, cursor.getFloat(columnIndex));
+                        } else if (field.getType() == float.class) {
+                            field.setFloat(entity, cursor.getFloat(columnIndex));
+                        } else if (field.getType() == byte[].class) {
+                            field.set(entity, cursor.getBlob(columnIndex));
+                        }
+                    }
+
+                    lists.add(entity);
+                }
+
+                return lists;
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } finally {
+                cursor.close();
+            }
+
+        }
+
         return null;
     }
 
     @Override
-    public List<T> findAll(Iterable var1) {
+    public List<T> findAll(Iterable<ID> var1) {
         return null;
     }
 

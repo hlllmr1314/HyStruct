@@ -47,16 +47,16 @@ public final class HyDbUtil {
                 annotation = field.getAnnotation(HyField.class);
                 if (field.getType() == String.class) {
                     stringBuffer.append(annotation.value() + " TEXT" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
-                } else if (field.getType() == Integer.class) {
+                } else if (field.getType() == Integer.class || field.getType() == int.class) {
                     stringBuffer.append(annotation.value() + " INTEGER" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
-                } else if (field.getType() == Double.class) {
+                } else if (field.getType() == Double.class || field.getType() == double.class) {
                     stringBuffer.append(annotation.value() + " DOUBLE" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
-                } else if (field.getType() == Long.class) {
+                } else if (field.getType() == Long.class || field.getType() == long.class) {
                     stringBuffer.append(annotation.value() + " BIGINT" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
+                } else if (field.getType() == Float.class || field.getType() == float.class) {
+                    stringBuffer.append(annotation.value() + " FLOAT" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
                 } else if (field.getType() == byte[].class) {
                     stringBuffer.append(annotation.value() + " BLOB" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
-                } else if (field.getType() == Float.class) {
-                    stringBuffer.append(annotation.value() + " FLOAT" + isPrimaryKey(annotation) + isAutoIncrement(annotation) + isNotNull(annotation) + ",");
                 } else {
                     LogUtil.w(field.getType() + "类型不支持");
                 }
@@ -70,6 +70,7 @@ public final class HyDbUtil {
         stringBuffer.append(")");
 
         String sql = stringBuffer.toString();
+        System.out.print("getCreateTableSql:" + sql);
         return sql;
     }
 
@@ -98,6 +99,8 @@ public final class HyDbUtil {
         HyTable annotation = (HyTable) tbClass.getAnnotation(HyTable.class);
         String tableName = annotation.value();
 
+        System.out.print("getTableName:" + tableName);
+
         return tableName;
     }
 
@@ -114,6 +117,19 @@ public final class HyDbUtil {
         StringBuffer stringBuffer = new StringBuffer("SELECT * FROM ");
         stringBuffer.append(getTableName(tbClass));
         stringBuffer.append(" LIMIT 0");
+
+        System.out.print("getQueryEmptyTableSql:" + stringBuffer.toString());
+
+        return stringBuffer.toString();
+    }
+
+    public static String getSelectAllSql(Class tbClass) {
+        check(tbClass);
+
+        StringBuffer stringBuffer = new StringBuffer("SELECT * FROM ");
+        stringBuffer.append(getTableName(tbClass));
+
+        System.out.print("getSelectAllSql:" + stringBuffer.toString());
 
         return stringBuffer.toString();
     }

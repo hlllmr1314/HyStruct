@@ -35,4 +35,12 @@ public class ExampleUnitTest {
         System.out.print("sql:" + sql);
         assertNotNull(sql);
     }
+
+    @Test
+    public void validSelectAllSql() throws Exception {
+
+        String sql = HyDbUtil.getSelectAllSql(User.class);
+        System.out.print("sql:" + sql);
+        assertNotNull(sql);
+    }
 }
