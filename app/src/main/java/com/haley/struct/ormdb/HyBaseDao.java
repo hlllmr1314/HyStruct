@@ -295,7 +295,7 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
 
     @Override
     public void deleteAll() {
-
+        sqLiteDatabase.delete(tableName, null, new String[]{});
     }
 
     @Override

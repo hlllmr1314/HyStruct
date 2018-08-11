@@ -80,4 +80,9 @@ public class OrmDbActivity extends AppCompatActivity {
         List<User> lists = baseDao.findAll(ids);
         LogUtil.w("findAllByIds:" + lists.toString());
     }
+
+    public void deletAll(View view) {
+        baseDao.deleteAll();
+    }
+
 }
