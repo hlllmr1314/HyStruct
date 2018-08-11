@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.haley.struct.ormdb.HyDbUtil.getCreateTableSql;
+import static com.haley.struct.ormdb.HyDbUtil.getPrimaryKeyColumnName;
 import static com.haley.struct.ormdb.HyDbUtil.getQueryByIdsSql;
 import static com.haley.struct.ormdb.HyDbUtil.getQueryEmptyTableSql;
 import static com.haley.struct.ormdb.HyDbUtil.getQueryAllSql;
@@ -299,8 +300,10 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public void delete(Serializable var1) {
-
+    public void delete(ID var1) {
+        String primaryKey = getPrimaryKeyColumnName(tbClass);
+        sqLiteDatabase.delete(tableName, primaryKey + "=?"
+                , new String[]{String.valueOf(var1)});
     }
 
     @Override

@@ -85,4 +85,7 @@ public class OrmDbActivity extends AppCompatActivity {
         baseDao.deleteAll();
     }
 
+    public void deleteById(View view) {
+        baseDao.delete(4);
+    }
 }
