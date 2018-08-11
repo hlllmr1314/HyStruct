@@ -12,13 +12,15 @@ import com.haley.struct.ormdb.annotation.HyField;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import static com.haley.struct.ormdb.HyDbUtil.getCreateTableSql;
+import static com.haley.struct.ormdb.HyDbUtil.getQueryByIdsSql;
 import static com.haley.struct.ormdb.HyDbUtil.getQueryEmptyTableSql;
-import static com.haley.struct.ormdb.HyDbUtil.getSelectAllSql;
+import static com.haley.struct.ormdb.HyDbUtil.getQueryAllSql;
 import static com.haley.struct.ormdb.HyDbUtil.getTableName;
 
 /**
@@ -199,8 +201,36 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
 
     @Override
     public List<T> findAll() {
+        Cursor cursor = sqLiteDatabase.rawQuery(getQueryAllSql(tbClass), new String[]{});
+        return ergodicList(cursor);
+    }
 
-        Cursor cursor = sqLiteDatabase.rawQuery(getSelectAllSql(tbClass), new String[]{});
+    @Override
+    public List<T> findAll(Iterable<ID> var1) {
+
+        if (var1 == null || !var1.iterator().hasNext()) {
+            return null;
+        }
+
+        StringBuffer stringBuffer = new StringBuffer();
+        Iterator iterator = var1.iterator();
+        while (iterator.hasNext()) {
+            if (stringBuffer.length() != 0) {
+                stringBuffer.append(",");
+            }
+            stringBuffer.append(String.valueOf(iterator.next()));
+        }
+
+        String[] selects = stringBuffer.toString().split(",");
+
+        LogUtil.w("selectArgs:" + selects);
+
+        Cursor cursor = sqLiteDatabase.rawQuery(getQueryByIdsSql(tbClass, var1)
+                , selects);
+        return ergodicList(cursor);
+    }
+
+    private List ergodicList(Cursor cursor) {
         if (cursor != null) {
             try {
                 List<T> lists = new ArrayList<>();
@@ -258,14 +288,8 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
             } finally {
                 cursor.close();
             }
-
         }
 
-        return null;
-    }
-
-    @Override
-    public List<T> findAll(Iterable<ID> var1) {
         return null;
     }
 

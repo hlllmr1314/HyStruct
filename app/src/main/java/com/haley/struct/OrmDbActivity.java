@@ -1,5 +1,6 @@
 package com.haley.struct;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +17,8 @@ import com.haley.struct.ormdb.HyDbFactory;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.haley.struct.BitmapUtils.getBitmapBytes;
 
 /**
  * Created by haley on 2018/8/10.
@@ -41,12 +44,7 @@ public class OrmDbActivity extends AppCompatActivity {
         user.setUserAge(29);
         user.setUserStature(1.7f);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] bitmapdata = stream.toByteArray();
-
-        user.setUserPhoto(bitmapdata);
+        user.setUserPhoto(getBitmapBytes(this, R.mipmap.ic_launcher));
         baseDao.save(user);
     }
 
@@ -72,5 +70,14 @@ public class OrmDbActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeByteArray(lists.get(0).getUserPhoto(), 0, lists.get(0).getUserPhoto().length);
             ((ImageView) findViewById(R.id.imageView)).setImageBitmap(bitmap);
         }
+    }
+
+    public void findAllByIds(View view) {
+        List<Integer> ids = new ArrayList<>();
+        ids.add(1);
+        ids.add(2);
+
+        List<User> lists = baseDao.findAll(ids);
+        LogUtil.w("findAllByIds:" + lists.toString());
     }
 }

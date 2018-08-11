@@ -9,6 +9,7 @@ import com.haley.struct.ormdb.exception.HyCreateTableException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Iterator;
 
 /**
  * Created by haley on 2018/8/8.
@@ -74,15 +75,33 @@ public final class HyDbUtil {
         return sql;
     }
 
-    private static String isPrimaryKey(HyField annotation) {
+    public static String isPrimaryKey(HyField annotation) {
         return annotation.isPrimaryKey() ? " PRIMARY KEY " : "";
     }
 
-    private static String isNotNull(HyField annotation) {
+    public static String getPrimaryKeyColumnName(Class tbClass) {
+
+        check(tbClass);
+
+        Field[] fields = tbClass.getDeclaredFields();
+        HyField annotation;
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(HyField.class)) {
+                annotation = field.getAnnotation(HyField.class);
+                if (annotation.isPrimaryKey()) {
+                    return annotation.value();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static String isNotNull(HyField annotation) {
         return annotation.isNotNull() ? " NOT NULL " : "";
     }
 
-    private static String isAutoIncrement(HyField annotation) {
+    public static String isAutoIncrement(HyField annotation) {
         return annotation.isAutoIncrement() ? " AUTOINCREMENT " : "";
     }
 
@@ -123,13 +142,54 @@ public final class HyDbUtil {
         return stringBuffer.toString();
     }
 
-    public static String getSelectAllSql(Class tbClass) {
+    /**
+     * 获取查全表的SQL语句
+     *
+     * @param tbClass
+     * @return
+     */
+    public static String getQueryAllSql(Class tbClass) {
         check(tbClass);
 
         StringBuffer stringBuffer = new StringBuffer("SELECT * FROM ");
         stringBuffer.append(getTableName(tbClass));
 
-        System.out.print("getSelectAllSql:" + stringBuffer.toString());
+        System.out.print("getQueryAllSql:" + stringBuffer.toString());
+
+        return stringBuffer.toString();
+    }
+
+    /**
+     * 获取根据批量Ids查询的SQL语句
+     *
+     * @param tbClass
+     * @param ids
+     * @return
+     */
+    public static String getQueryByIdsSql(Class tbClass, Iterable ids) {
+
+        String sql = getQueryAllSql(tbClass);
+
+        //如果传入的参数为null or 列表李敏是空的则直接返回查全表的SQL语句
+        if (ids == null || !ids.iterator().hasNext()) {
+            return sql;
+        }
+
+        StringBuffer stringBuffer = new StringBuffer(sql);
+        stringBuffer.append(" WHERE ");
+        stringBuffer.append(getPrimaryKeyColumnName(tbClass));
+        stringBuffer.append(" IN (");
+        Iterator iterator = ids.iterator();
+        while (iterator.hasNext()) {
+            stringBuffer.append("?,");
+            iterator.next();
+        }
+
+        int andCharacterIndex = stringBuffer.lastIndexOf(",");
+        if (andCharacterIndex > 0) {
+            stringBuffer.deleteCharAt(andCharacterIndex);
+        }
+        stringBuffer.append(")");
 
         return stringBuffer.toString();
     }
