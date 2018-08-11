@@ -66,6 +66,6 @@ public interface HyDao<T, ID extends Serializable> {
      *
      * @param var1
      */
-    void delete(Iterable<? extends T> var1);
+    boolean delete(Iterable<? extends ID> var1);
 
 }

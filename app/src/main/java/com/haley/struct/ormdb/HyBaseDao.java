@@ -307,12 +307,42 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public void delete(Iterable var1) {
+    public boolean delete(Iterable<? extends ID> var1) {
 
+        if (var1 == null || !var1.iterator().hasNext()) {
+            return false;
+        }
+
+        String primaryKey = getPrimaryKeyColumnName(tbClass);
+
+        StringBuffer selectSb = new StringBuffer();
+        StringBuffer whereSb = new StringBuffer();
+
+        whereSb.append(primaryKey + " IN(");
+
+        Iterator iterator = var1.iterator();
+        while (iterator.hasNext()) {
+            if (selectSb.length() != 0) {
+                selectSb.append(",");
+                whereSb.append(",");
+            }
+            whereSb.append("?");
+            selectSb.append(String.valueOf(iterator.next()));
+        }
+        whereSb.append(")");
+
+        String[] selects = selectSb.toString().split(",");
+        String whereStr = whereSb.toString();
+
+        LogUtil.w("selectArgs:" + selects);
+        LogUtil.w("whereStr:" + whereStr);
+        sqLiteDatabase.delete(tableName, whereStr, selects);
+
+        return true;
     }
 
     @Override
-    public void delete(Object var1) {
+    public void delete(T var1) {
 
     }
 }

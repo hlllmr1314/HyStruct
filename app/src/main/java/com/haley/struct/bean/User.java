@@ -86,7 +86,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", userAge=" + userAge +
                 ", userStature=" + userStature +
-                ", userPhoto=" + Arrays.toString(userPhoto) +
+                ", userPhoto=" + userPhoto.length +
                 '}';
     }
 }

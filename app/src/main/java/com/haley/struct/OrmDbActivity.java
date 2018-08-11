@@ -78,7 +78,7 @@ public class OrmDbActivity extends AppCompatActivity {
         ids.add(2);
 
         List<User> lists = baseDao.findAll(ids);
-        LogUtil.w("findAllByIds:" + lists.toString());
+        LogUtil.w("findAllByIds:"+lists.size()+ lists.toString());
     }
 
     public void deletAll(View view) {
@@ -87,5 +87,13 @@ public class OrmDbActivity extends AppCompatActivity {
 
     public void deleteById(View view) {
         baseDao.delete(4);
+    }
+
+    public void deleteByIds(View view) {
+        List<Integer> ids = new ArrayList<>();
+        ids.add(6);
+        ids.add(7);
+        boolean result = baseDao.delete(ids);
+        LogUtil.w("deleteByIds:" + result);
     }
 }
