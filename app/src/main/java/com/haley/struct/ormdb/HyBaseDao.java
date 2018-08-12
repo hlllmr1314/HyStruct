@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static com.haley.struct.ormdb.HyDbUtil.checkIsDefalutValue;
 import static com.haley.struct.ormdb.HyDbUtil.getCreateTableSql;
 import static com.haley.struct.ormdb.HyDbUtil.getPrimaryKeyColumnName;
 import static com.haley.struct.ormdb.HyDbUtil.getQueryByIdsSql;
@@ -128,7 +129,7 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
         }
 
         ContentValues contentValues = getContentValues(var1);
-        sqLiteDatabase.insert(tableName, null, contentValues);
+        sqLiteDatabase.insertWithOnConflict(tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
 
         return -1L;
     }
@@ -150,7 +151,7 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
                 if (value != null) {
 
                     //针对自增的属性，如果传入参数为0，则进行忽视
-                    if (field.getAnnotation(HyField.class).isAutoIncrement()) {
+                    if (field.getAnnotation(HyField.class).isAutoIncrement() && checkIsDefalutValue(value)) {
                         continue;
                     }
 

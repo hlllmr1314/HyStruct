@@ -1,5 +1,6 @@
 package com.haley.struct.ormdb;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.haley.struct.LogUtil;
@@ -194,5 +195,23 @@ public final class HyDbUtil {
         return stringBuffer.toString();
     }
 
+    public static boolean checkIsDefalutValue(Object value) {
+        if (value instanceof String) {
+            return TextUtils.isEmpty((String) value);
+        } else if (value instanceof Integer) {
+            return (Integer) value == 0;
+        } else if (value instanceof Double) {
+            return (Double) value == 0;
+        } else if (value instanceof Long) {
+            return (Long) value == 0;
+        } else if (value instanceof Float) {
+            return (Float) value == 0;
+        } else if (value instanceof byte[]) {
+            return value == null;
+        }
+
+        return false;
+
+    }
 
 }

@@ -39,10 +39,11 @@ public class OrmDbActivity extends AppCompatActivity {
 
     public void insertOne(View view) {
         User user = new User();
-        user.setUserName("ss");
-        user.setPassword("pp");
-        user.setUserAge(29);
-        user.setUserStature(1.7f);
+        user.setUserId(5);
+        user.setUserName("sss");
+        user.setPassword("ppp");
+        user.setUserAge(30);
+        user.setUserStature(1.8f);
 
         user.setUserPhoto(getBitmapBytes(this, R.mipmap.ic_launcher));
         baseDao.save(user);
