@@ -346,4 +346,15 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     public void delete(T var1) {
 
     }
+
+    @Override
+    public void execSQL(String sql) {
+        execSQL(sql, new String[]{});
+    }
+
+    @Override
+    public void execSQL(String sql, Object[] bindArgs) {
+        LogUtil.w("execSQL:" + sql + " args:" + bindArgs);
+        sqLiteDatabase.execSQL(sql, bindArgs);
+    }
 }

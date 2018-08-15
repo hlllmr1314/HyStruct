@@ -25,7 +25,7 @@ public interface HyDao<T, ID extends Serializable> {
      * @param var1
      * @return
      */
-     boolean save(Iterable<T> var1);
+    boolean save(Iterable<T> var1);
 
     /**
      * 查询全部
@@ -68,4 +68,18 @@ public interface HyDao<T, ID extends Serializable> {
      */
     boolean delete(Iterable<? extends ID> var1);
 
+    /**
+     * 执行SQL语句
+     *
+     * @param sql
+     */
+    void execSQL(String sql);
+
+    /**
+     * 执行SQL语句
+     *
+     * @param sql
+     * @param bindArgs
+     */
+    void execSQL(String sql, Object[] bindArgs);
 }

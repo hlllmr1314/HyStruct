@@ -97,4 +97,8 @@ public class OrmDbActivity extends AppCompatActivity {
         boolean result = baseDao.delete(ids);
         LogUtil.w("deleteByIds:" + result);
     }
+
+    public void dropTable(View view) {
+        baseDao.execSQL("DROP TABLE t_user5");
+    }
 }
