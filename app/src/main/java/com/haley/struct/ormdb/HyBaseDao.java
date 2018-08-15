@@ -16,9 +16,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static com.haley.struct.ormdb.HyDbUtil.checkIsDefalutValue;
 import static com.haley.struct.ormdb.HyDbUtil.getCreateTableSql;
+import static com.haley.struct.ormdb.HyDbUtil.getDropTableSql;
 import static com.haley.struct.ormdb.HyDbUtil.getPrimaryKeyColumnName;
 import static com.haley.struct.ormdb.HyDbUtil.getQueryByIdsSql;
 import static com.haley.struct.ormdb.HyDbUtil.getQueryEmptyTableSql;
@@ -348,13 +350,36 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public void execSQL(String sql) {
-        execSQL(sql, new String[]{});
+    public boolean dropTable() {
+        try {
+            execSQL(getDropTableSql(tbClass));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
     }
 
     @Override
-    public void execSQL(String sql, Object[] bindArgs) {
+    public boolean execSQL(String sql) {
+        try {
+            execSQL(sql, new String[]{});
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean execSQL(String sql, Object[] bindArgs) {
         LogUtil.w("execSQL:" + sql + " args:" + bindArgs);
-        sqLiteDatabase.execSQL(sql, bindArgs);
+        try {
+            sqLiteDatabase.execSQL(sql, bindArgs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

@@ -211,7 +211,17 @@ public final class HyDbUtil {
         }
 
         return false;
+    }
 
+    public static String getDropTableSql(Class tbClass) {
+
+        check(tbClass);
+
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("DROP TABLE ");
+        stringBuffer.append(getTableName(tbClass));
+
+        return stringBuffer.toString();
     }
 
 }

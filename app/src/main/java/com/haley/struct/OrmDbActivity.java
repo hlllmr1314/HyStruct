@@ -79,7 +79,7 @@ public class OrmDbActivity extends AppCompatActivity {
         ids.add(2);
 
         List<User> lists = baseDao.findAll(ids);
-        LogUtil.w("findAllByIds:"+lists.size()+ lists.toString());
+        LogUtil.w("findAllByIds:" + lists.size() + lists.toString());
     }
 
     public void deletAll(View view) {
@@ -99,6 +99,7 @@ public class OrmDbActivity extends AppCompatActivity {
     }
 
     public void dropTable(View view) {
-        baseDao.execSQL("DROP TABLE t_user5");
+//        baseDao.execSQL("DROP TABLE t_user5");
+        baseDao.dropTable();
     }
 }

@@ -69,11 +69,18 @@ public interface HyDao<T, ID extends Serializable> {
     boolean delete(Iterable<? extends ID> var1);
 
     /**
+     * 删除数据库
+     *
+     * @return
+     */
+    boolean dropTable();
+
+    /**
      * 执行SQL语句
      *
      * @param sql
      */
-    void execSQL(String sql);
+    boolean execSQL(String sql);
 
     /**
      * 执行SQL语句
@@ -81,5 +88,5 @@ public interface HyDao<T, ID extends Serializable> {
      * @param sql
      * @param bindArgs
      */
-    void execSQL(String sql, Object[] bindArgs);
+    boolean execSQL(String sql, Object[] bindArgs);
 }
