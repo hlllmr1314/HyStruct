@@ -1,4 +1,4 @@
-package com.haley.struct.ormdb.annotation;
+package com.haley.ormdb.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

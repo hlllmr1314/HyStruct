@@ -1,10 +1,9 @@
-package com.haley.struct.ormdb;
+package com.haley.ormdb;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.ArrayMap;
-import android.util.Log;
 
 import com.haley.struct.LogUtil;
 import com.haley.struct.ormdb.annotation.HyField;
@@ -12,11 +11,9 @@ import com.haley.struct.ormdb.annotation.HyField;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import static com.haley.struct.ormdb.HyDbUtil.checkIsDefalutValue;
 import static com.haley.struct.ormdb.HyDbUtil.getCreateTableSql;

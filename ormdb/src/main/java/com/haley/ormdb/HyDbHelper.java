@@ -1,4 +1,4 @@
-package com.haley.struct.ormdb;
+package com.haley.ormdb;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,7 +25,6 @@ public class HyDbHelper extends SQLiteOpenHelper {
                 }
             }
         }
-
         return dbHelper;
     }
 

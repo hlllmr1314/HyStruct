@@ -1,10 +1,8 @@
-package com.haley.struct.ormdb;
+package com.haley.ormdb;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.Serializable;
-import java.sql.SQLClientInfoException;
 
 /**
  * Created by haley on 2018/7/26.

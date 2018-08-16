@@ -1,4 +1,4 @@
-package com.haley.struct.ormdb;
+package com.haley.ormdb;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,14 +1,12 @@
-package com.haley.struct.ormdb;
+package com.haley.ormdb;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.haley.struct.LogUtil;
 import com.haley.struct.ormdb.annotation.HyField;
 import com.haley.struct.ormdb.annotation.HyTable;
 import com.haley.struct.ormdb.exception.HyCreateTableException;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 

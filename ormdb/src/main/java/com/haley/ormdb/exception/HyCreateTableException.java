@@ -1,4 +1,4 @@
-package com.haley.struct.ormdb.exception;
+package com.haley.ormdb.exception;
 
 /**
  * Created by haley on 2018/8/8.

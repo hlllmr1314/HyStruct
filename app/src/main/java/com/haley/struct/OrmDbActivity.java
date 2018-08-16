@@ -10,9 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.haley.ormdb.HyBaseDao;
+import com.haley.ormdb.HyDbFactory;
 import com.haley.struct.bean.User;
-import com.haley.struct.ormdb.HyBaseDao;
-import com.haley.struct.ormdb.HyDbFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
