@@ -1,7 +1,8 @@
 package com.haley.struct.bean;
 
-import com.haley.struct.ormdb.annotation.HyField;
-import com.haley.struct.ormdb.annotation.HyTable;
+
+import com.haley.ormdb.annotation.HyField;
+import com.haley.ormdb.annotation.HyTable;
 
 import java.util.Arrays;
 
@@ -29,6 +30,9 @@ public class User {
 
     @HyField("user_photo")
     private byte[] userPhoto;
+
+    @HyField(value = "user_email", defaultValue = "test")
+    private String userEmail;
 
     public String getUserName() {
         return userName;
@@ -78,6 +82,14 @@ public class User {
         this.userPhoto = userPhoto;
     }
 
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -86,7 +98,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", userAge=" + userAge +
                 ", userStature=" + userStature +
-                ", userPhoto=" + userPhoto.length +
+                ", userPhoto=" + Arrays.toString(userPhoto) +
+                ", userEmail='" + userEmail + '\'' +
                 '}';
     }
 }

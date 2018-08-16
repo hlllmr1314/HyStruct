@@ -1,9 +1,7 @@
 package com.haley.struct;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +12,6 @@ import com.haley.ormdb.HyBaseDao;
 import com.haley.ormdb.HyDbFactory;
 import com.haley.struct.bean.User;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +26,6 @@ public class OrmDbActivity extends AppCompatActivity {
     private HyBaseDao<User, Integer> baseDao;
 
     @Override
-
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ormdb);
@@ -44,6 +40,7 @@ public class OrmDbActivity extends AppCompatActivity {
         user.setPassword("ppp");
         user.setUserAge(30);
         user.setUserStature(1.8f);
+        user.setUserEmail("leihuang@aa.com");
 
         user.setUserPhoto(getBitmapBytes(this, R.mipmap.ic_launcher));
         baseDao.save(user);

@@ -1,1 +1,1 @@
-include ':app', ':ormdb'
+include ':app', ':ormdb', ':base'

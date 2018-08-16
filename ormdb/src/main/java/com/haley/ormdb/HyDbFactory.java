@@ -3,17 +3,22 @@ package com.haley.ormdb;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
- * Created by haley on 2018/7/26.
+ * </p>
+ * Author: haley
+ * Email : leihuang@ecarx.com.cn
+ * Date  : 2018/8/16.
+ * Desc  : 框架工厂类，对外数据库操作具柄
+ * </p>
  */
 
 public final class HyDbFactory {
 
     private static HyDbFactory mInstance;
-
-    private HyDbHelper dbHelper;
-    private SQLiteDatabase sqLiteDatabase;
 
     public static HyDbFactory getInstance() {
         if (mInstance == null) {
@@ -27,15 +32,19 @@ public final class HyDbFactory {
     }
 
     private HyDbFactory() {
-        //数据库初始化操作
-        this.dbHelper = HyDbHelper.getInstance();
-        this.sqLiteDatabase = dbHelper.getWritableDatabase();
+
     }
 
     public synchronized <T, ID extends Serializable> HyBaseDao<T, ID> getBaseDao(Class<T> tbClass) {
         HyBaseDao baseDao = null;
 
         try {
+            HyDbHelper dbHelper = HyDatabase.getInstance().getSingleDbHelper();
+            if (dbHelper == null) {
+                return null;
+            }
+
+            SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
             baseDao = HyBaseDao.class.newInstance();
             baseDao.init(sqLiteDatabase, tbClass);
         } catch (InstantiationException e) {

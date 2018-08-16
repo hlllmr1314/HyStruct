@@ -55,13 +55,6 @@ public interface HyDao<T, ID extends Serializable> {
     void delete(ID var1);
 
     /**
-     * 删除一个实例的记录
-     *
-     * @param var1
-     */
-    void delete(T var1);
-
-    /**
      * 删除批量实例记录
      *
      * @param var1

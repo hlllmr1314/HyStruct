@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.ArrayMap;
 
-import com.haley.struct.LogUtil;
-import com.haley.struct.ormdb.annotation.HyField;
+import com.haley.base.LogUtil;
+import com.haley.ormdb.annotation.HyField;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -15,14 +15,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.haley.struct.ormdb.HyDbUtil.checkIsDefalutValue;
-import static com.haley.struct.ormdb.HyDbUtil.getCreateTableSql;
-import static com.haley.struct.ormdb.HyDbUtil.getDropTableSql;
-import static com.haley.struct.ormdb.HyDbUtil.getPrimaryKeyColumnName;
-import static com.haley.struct.ormdb.HyDbUtil.getQueryByIdsSql;
-import static com.haley.struct.ormdb.HyDbUtil.getQueryEmptyTableSql;
-import static com.haley.struct.ormdb.HyDbUtil.getQueryAllSql;
-import static com.haley.struct.ormdb.HyDbUtil.getTableName;
+import static com.haley.ormdb.HyDbUtil.checkIsDefalutValue;
+import static com.haley.ormdb.HyDbUtil.getCreateTableSql;
+import static com.haley.ormdb.HyDbUtil.getDropTableSql;
+import static com.haley.ormdb.HyDbUtil.getPrimaryKeyColumnName;
+import static com.haley.ormdb.HyDbUtil.getQueryAllSql;
+import static com.haley.ormdb.HyDbUtil.getQueryByIdsSql;
+import static com.haley.ormdb.HyDbUtil.getQueryEmptyTableSql;
+import static com.haley.ormdb.HyDbUtil.getTableName;
+
 
 /**
  * Created by haley on 2018/7/26.
@@ -101,7 +102,8 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
             if (columnNames != null) {
                 for (String columnName : columnNames) {
                     for (Field field : tbClass.getDeclaredFields()) {
-                        if (columnName.equals(field.getAnnotation(HyField.class).value())) {
+                        if (field.isAnnotationPresent(HyField.class)
+                                && columnName.equals(field.getAnnotation(HyField.class).value())) {
                             arrayMap.put(columnName, field);
                             break;
                         }
@@ -339,11 +341,6 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
         sqLiteDatabase.delete(tableName, whereStr, selects);
 
         return true;
-    }
-
-    @Override
-    public void delete(T var1) {
-
     }
 
     @Override

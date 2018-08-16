@@ -2,10 +2,10 @@ package com.haley.ormdb;
 
 import android.text.TextUtils;
 
-import com.haley.struct.LogUtil;
-import com.haley.struct.ormdb.annotation.HyField;
-import com.haley.struct.ormdb.annotation.HyTable;
-import com.haley.struct.ormdb.exception.HyCreateTableException;
+import com.haley.base.LogUtil;
+import com.haley.ormdb.annotation.HyField;
+import com.haley.ormdb.annotation.HyTable;
+import com.haley.ormdb.exception.HyCreateTableException;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -190,6 +190,8 @@ public final class HyDbUtil {
         }
         stringBuffer.append(")");
 
+        System.out.print("getQueryByIdsSql:" + stringBuffer.toString());
+
         return stringBuffer.toString();
     }
 
@@ -219,7 +221,62 @@ public final class HyDbUtil {
         stringBuffer.append("DROP TABLE ");
         stringBuffer.append(getTableName(tbClass));
 
+        System.out.print("getDropTableSql:" + stringBuffer.toString());
+
         return stringBuffer.toString();
+    }
+
+    /**
+     * 获取新增字段的SQL语句
+     * <p>
+     * 例如:alter table t_user add [column] user_age int default 0
+     *
+     * @param tableName 表名
+     * @param field     字段对应属性的Field
+     * @return
+     */
+    public static String getAlertTableColumnNameSql(String tableName, Field field) {
+
+        if (!field.isAnnotationPresent(HyField.class)) {
+            return null;
+        }
+
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("ALTER TABLE " + tableName);
+        stringBuffer.append(" ADD " + field.getAnnotation(HyField.class).value());
+        stringBuffer.append(" " + getColumnNameType(field));
+        stringBuffer.append(" DEFAULT " + field.getAnnotation(HyField.class).defaultValue());
+
+        System.out.print("getAlertTableColumnNameSql:" + stringBuffer.toString());
+
+        return stringBuffer.toString();
+    }
+
+    /**
+     * 获取
+     *
+     * @param field
+     * @return
+     */
+    public static String getColumnNameType(Field field) {
+        if (field.isAnnotationPresent(HyField.class)) {
+            if (field.getType() == String.class) {
+                return "TEXT";
+            } else if (field.getType() == Integer.class || field.getType() == int.class) {
+                return "INTEGER";
+            } else if (field.getType() == Double.class || field.getType() == double.class) {
+                return "DOUBLE";
+            } else if (field.getType() == Long.class || field.getType() == long.class) {
+                return "BIGINT";
+            } else if (field.getType() == Float.class || field.getType() == float.class) {
+                return "FLOAT";
+            } else if (field.getType() == byte[].class) {
+                return "BLOB";
+            }
+        }
+
+        return null;
+
     }
 
 }

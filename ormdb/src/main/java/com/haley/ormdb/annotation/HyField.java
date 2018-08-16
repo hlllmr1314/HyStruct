@@ -28,6 +28,7 @@ public @interface HyField {
 
     /**
      * 自增ID
+     *
      * @return
      */
     boolean isAutoIncrement() default false;
@@ -38,4 +39,11 @@ public @interface HyField {
      * @return true:不可以为null false:可以为null
      */
     boolean isNotNull() default false;
+
+    /**
+     * 字段默认值
+     *
+     * @return
+     */
+    String defaultValue() default "";
 }
