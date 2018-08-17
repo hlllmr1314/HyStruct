@@ -43,7 +43,7 @@ public final class HyDbManager {
      * @param database
      * @param dbName
      */
-    public void createDb(SQLiteDatabase database, String dbName) {
+    public synchronized void createDb(SQLiteDatabase database, String dbName) {
         LogUtil.i("Execute database create ！！！");
 
         if (database == null) {
@@ -89,7 +89,7 @@ public final class HyDbManager {
      * @param database SQLiteDatabase
      * @param dbName   DatabaseName
      */
-    public void updateDb(SQLiteDatabase database, String dbName) {
+    public synchronized void updateDb(SQLiteDatabase database, String dbName) {
         LogUtil.i("Execute database update ！！！");
 
         if (database == null) {

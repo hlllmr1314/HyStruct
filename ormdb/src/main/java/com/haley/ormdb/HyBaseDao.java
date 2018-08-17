@@ -69,7 +69,7 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
         isInit = false;
     }
 
-    private void initCacheMap() {
+    private synchronized void initCacheMap() {
         if (arrayMap == null) {
             arrayMap = new ArrayMap();
         } else {
@@ -97,7 +97,7 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public Long save(T var1) {
+    public synchronized Long save(T var1) {
 
         if (sqLiteDatabase == null) {
             LogUtil.w("sqLiteDatabase is null!");
@@ -163,7 +163,7 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public boolean save(Iterable<T> var1) {
+    public synchronized boolean save(Iterable<T> var1) {
         sqLiteDatabase.beginTransaction();
         try {
             Iterator<T> iterator = var1.iterator();
@@ -183,13 +183,13 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public List<T> findAll() {
+    public synchronized List<T> findAll() {
         Cursor cursor = sqLiteDatabase.rawQuery(getQueryAllSql(tbClass), new String[]{});
         return ergodicList(cursor);
     }
 
     @Override
-    public List<T> findAll(Iterable<ID> var1) {
+    public synchronized List<T> findAll(Iterable<ID> var1) {
 
         if (var1 == null || !var1.iterator().hasNext()) {
             return null;
@@ -277,19 +277,19 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public void deleteAll() {
+    public synchronized void deleteAll() {
         sqLiteDatabase.delete(tableName, null, new String[]{});
     }
 
     @Override
-    public void delete(ID var1) {
+    public synchronized void delete(ID var1) {
         String primaryKey = getPrimaryKeyColumnName(tbClass);
         sqLiteDatabase.delete(tableName, primaryKey + "=?"
                 , new String[]{String.valueOf(var1)});
     }
 
     @Override
-    public boolean delete(Iterable<? extends ID> var1) {
+    public synchronized boolean delete(Iterable<? extends ID> var1) {
 
         if (var1 == null || !var1.iterator().hasNext()) {
             return false;
@@ -324,7 +324,7 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public boolean dropTable() {
+    public synchronized boolean dropTable() {
         try {
             execSQL(getDropTableSql(tbClass));
         } catch (Exception e) {
@@ -335,7 +335,7 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public boolean execSQL(String sql) {
+    public synchronized boolean execSQL(String sql) {
         try {
             execSQL(sql, new String[]{});
         } catch (Exception e) {
@@ -346,7 +346,7 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
     }
 
     @Override
-    public boolean execSQL(String sql, Object[] bindArgs) {
+    public synchronized boolean execSQL(String sql, Object[] bindArgs) {
         LogUtil.w("execSQL:" + sql + " args:" + bindArgs);
         try {
             sqLiteDatabase.execSQL(sql, bindArgs);
