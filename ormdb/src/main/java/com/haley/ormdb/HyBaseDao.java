@@ -53,11 +53,6 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
                 return false;
             }
 
-            //1,建表
-            if (!autoCreateTable()) {
-                return false;
-            }
-
             isInit = true;
         }
 
@@ -72,21 +67,6 @@ public class HyBaseDao<T, ID extends Serializable> implements HyDao<T, ID> {
             sqLiteDatabase.close();
         }
         isInit = false;
-    }
-
-    /**
-     * 自动建表
-     *
-     * @return
-     */
-    private boolean autoCreateTable() {
-        try {
-            sqLiteDatabase.execSQL(getCreateTableSql(tbClass));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
     }
 
     private void initCacheMap() {

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.haley.ormdb.HyDbUtil.getAlertTableColumnNameSql;
+import static com.haley.ormdb.HyDbUtil.getCreateTableSql;
 import static com.haley.ormdb.HyDbUtil.getQueryEmptyTableSql;
 import static com.haley.ormdb.HyDbUtil.getTableName;
 
@@ -36,11 +37,46 @@ public final class HyDbManager {
         return dbManager;
     }
 
+    /**
+     * 创建数据库的同时顺带把表都给建了
+     *
+     * @param database
+     * @param dbName
+     */
+    public void createDb(SQLiteDatabase database, String dbName) {
+        LogUtil.i("Execute database create ！！！");
 
-    private Map<String, HyDbHelper> cacheDbHelper;
+        if (database == null) {
+            LogUtil.e("database is null! Can not update database!");
+            return;
+        }
 
-    public void initDb() {
+        List<Class> classList = hyDatabase.getTablesByDbName(dbName);
 
+        if (classList == null || classList.size() == 0) {
+            LogUtil.e("Update tables is Empty!");
+            return;
+        }
+
+        for (Class tbClass : classList) {
+            autoCreateTable(database, tbClass);
+        }
+
+    }
+
+    /**
+     * 自动建表
+     *
+     * @return
+     */
+    private boolean autoCreateTable(SQLiteDatabase database, Class tbClass) {
+        try {
+            database.execSQL(getCreateTableSql(tbClass));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -139,6 +175,5 @@ public final class HyDbManager {
 
         return newColumns;
     }
-
 
 }

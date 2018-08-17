@@ -1,9 +1,12 @@
 package com.haley.ormdb;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.util.ArrayMap;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -19,6 +22,7 @@ import java.util.Map;
 public final class HyDbFactory {
 
     private static HyDbFactory mInstance;
+    private Map<String, HyBaseDao> daoCahces;
 
     public static HyDbFactory getInstance() {
         if (mInstance == null) {
@@ -32,18 +36,30 @@ public final class HyDbFactory {
     }
 
     private HyDbFactory() {
-
+        this.daoCahces = new ArrayMap<>();
     }
 
     public synchronized <T, ID extends Serializable> HyBaseDao<T, ID> getBaseDao(Class<T> tbClass) {
-        HyBaseDao baseDao = null;
+        return getBaseDao(HyDatabase.getInstance().getSingleDbHelper(), tbClass);
+    }
+
+    public synchronized <T, ID extends Serializable> HyBaseDao<T, ID> getBaseDao(String dbName, Class<T> tbClass) {
+        return getBaseDao(HyDatabase.getInstance().getDbHelperByDbName(dbName), tbClass);
+    }
+
+    private synchronized <T, ID extends Serializable> HyBaseDao<T, ID> getBaseDao(@NonNull HyDbHelper dbHelper, Class<T> tbClass) {
+
+        if (dbHelper == null) {
+            return null;
+        }
+
+        HyBaseDao baseDao = daoCahces.get(dbHelper.getDatabaseName() + tbClass.getSimpleName());
+
+        if (baseDao != null) {
+            return baseDao;
+        }
 
         try {
-            HyDbHelper dbHelper = HyDatabase.getInstance().getSingleDbHelper();
-            if (dbHelper == null) {
-                return null;
-            }
-
             SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
             baseDao = HyBaseDao.class.newInstance();
             baseDao.init(sqLiteDatabase, tbClass);
@@ -53,6 +69,7 @@ public final class HyDbFactory {
             e.printStackTrace();
         }
 
+        daoCahces.put(dbHelper.getDatabaseName() + tbClass.getSimpleName(), baseDao);
 
         return baseDao;
     }

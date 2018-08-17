@@ -25,7 +25,7 @@ public final class HyDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        dbManager.createDb(db, getDatabaseName());
     }
 
     @Override

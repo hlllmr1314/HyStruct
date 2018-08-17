@@ -11,7 +11,12 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 
 /**
- * Created by haley on 2018/8/8.
+ * </p>
+ * Author: haley
+ * Email : leihuang@ecarx.com.cn
+ * Date  : 2018/8/17.
+ * Desc  : HyDbUtil 处理数据库的工具类
+ * </p>
  */
 
 public final class HyDbUtil {
@@ -74,10 +79,20 @@ public final class HyDbUtil {
         return sql;
     }
 
+    /**
+     * 判断是否为主键，并返回对应SQL标示
+     * @param annotation
+     * @return
+     */
     public static String isPrimaryKey(HyField annotation) {
         return annotation.isPrimaryKey() ? " PRIMARY KEY " : "";
     }
 
+    /**
+     * 获取主键
+     * @param tbClass
+     * @return
+     */
     public static String getPrimaryKeyColumnName(Class tbClass) {
 
         check(tbClass);
@@ -195,6 +210,11 @@ public final class HyDbUtil {
         return stringBuffer.toString();
     }
 
+    /**
+     * 检查是否是默认值
+     * @param value
+     * @return
+     */
     public static boolean checkIsDefalutValue(Object value) {
         if (value instanceof String) {
             return TextUtils.isEmpty((String) value);
@@ -213,6 +233,11 @@ public final class HyDbUtil {
         return false;
     }
 
+    /**
+     * 获取删表的SQL语句
+     * @param tbClass
+     * @return
+     */
     public static String getDropTableSql(Class tbClass) {
 
         check(tbClass);
@@ -241,11 +266,13 @@ public final class HyDbUtil {
             return null;
         }
 
+        HyField hyField = field.getAnnotation(HyField.class);
+
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("ALTER TABLE " + tableName);
-        stringBuffer.append(" ADD " + field.getAnnotation(HyField.class).value());
+        stringBuffer.append(" ADD " + hyField.value());
         stringBuffer.append(" " + getColumnNameType(field));
-        stringBuffer.append(" DEFAULT " + field.getAnnotation(HyField.class).defaultValue());
+        stringBuffer.append(" DEFAULT " + hyField.defaultValue());
 
         System.out.print("getAlertTableColumnNameSql:" + stringBuffer.toString());
 

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.haley.ormdb.HyBaseDao;
 import com.haley.ormdb.HyDbFactory;
 import com.haley.struct.bean.User;
+import com.haley.struct.bean.UserDbConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class OrmDbActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ormdb);
 
-        baseDao = HyDbFactory.getInstance().getBaseDao(User.class);
+        baseDao = HyDbFactory.getInstance().getBaseDao(UserDbConfig.DB_NAME, User.class);
     }
 
     public void insertOne(View view) {

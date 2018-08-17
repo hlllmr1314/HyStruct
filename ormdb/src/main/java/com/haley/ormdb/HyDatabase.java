@@ -24,7 +24,7 @@ import java.util.Map;
 public final class HyDatabase {
 
     private static HyDatabase mInstance;
-    private HyDabaseBuilder builder;
+    private HyDatabaseBuilder builder;
 
     protected List<HyDbConfig> dbConfigs;
     protected Map<String, HyDbHelper> dbHelperMaps;
@@ -45,9 +45,9 @@ public final class HyDatabase {
         return mInstance;
     }
 
-    public static void init(@NonNull HyDabaseBuilder builder) {
+    public static void init(@NonNull HyDatabaseBuilder builder) {
         if (builder == null) {
-            throw new NullPointerException("HyDabaseBuilder builder cannot be null !");
+            throw new NullPointerException("HyDatabaseBuilder builder cannot be null !");
         }
 
         getInstance();
@@ -115,8 +115,19 @@ public final class HyDatabase {
         return dbHelperMaps.get(dbName);
     }
 
+    /**
+     * 如果就一个数据库，则无需传查找默认的就可以了，如果由多个数据库，也不做处理，因为我也不知道你想操作哪个数据库
+     *
+     * @return
+     */
     public HyDbHelper getSingleDbHelper() {
-        if (dbHelperMaps == null && dbHelperMaps.size() != 1) {
+        if (dbHelperMaps == null) {
+            LogUtil.e("Not execute setSingleDbConfig（） first！");
+            return null;
+        }
+
+        if (dbHelperMaps.size() != 1) {
+            LogUtil.e("Multiple selections exist for multiple databases!");
             return null;
         }
 
@@ -127,27 +138,33 @@ public final class HyDatabase {
         return null;
     }
 
-    public static class HyDabaseBuilder {
+    public static class HyDatabaseBuilder {
 
         protected Context context;
         protected List<HyDbConfig> dbConfigs;
 
-        private HyDabaseBuilder(Context context) {
+        private HyDatabaseBuilder(Context context) {
             this.context = context;
             this.dbConfigs = new ArrayList<>();
         }
 
-        public static HyDabaseBuilder build(Context context) {
-            return new HyDabaseBuilder(context);
+        public static HyDatabaseBuilder build(Context context) {
+            return new HyDatabaseBuilder(context);
         }
 
-        public HyDabaseBuilder setSingleDbConfig(String dbName, int dbVersion, List<Class> dbTables) {
+        public HyDatabaseBuilder setSingleDbConfig(String dbName, int dbVersion, List<Class> dbTables) {
             dbConfigs.clear();
             dbConfigs.add(new HyDbConfig(dbName, dbVersion, dbTables));
             return this;
         }
 
-        public HyDabaseBuilder setMultiDbConfig(ProviderDbConfigCallback multiDbConfig) {
+        public HyDatabaseBuilder setSingleDbConfig(HyDbConfig dbConfig) {
+            dbConfigs.clear();
+            dbConfigs.add(dbConfig);
+            return this;
+        }
+
+        public HyDatabaseBuilder setMultiDbConfig(ProviderDbConfigCallback multiDbConfig) {
             dbConfigs.clear();
             dbConfigs.addAll(multiDbConfig.getDbConfigs());
             return this;

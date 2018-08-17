@@ -17,7 +17,6 @@ public class HyDbConfig {
     private int dbVersion;
     private List<Class> dbTables;
 
-
     public HyDbConfig(String dbName, int dbVersion, List<Class> dbTables) {
         this.dbName = dbName;
         this.dbVersion = dbVersion;
@@ -47,4 +46,5 @@ public class HyDbConfig {
     public void setDbTables(List<Class> dbTables) {
         this.dbTables = dbTables;
     }
+
 }
