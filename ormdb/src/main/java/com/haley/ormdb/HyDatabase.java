@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
+import com.haley.base.HyLogcat;
 import com.haley.base.LogUtil;
 
 import java.util.ArrayList;
@@ -31,6 +32,9 @@ public final class HyDatabase {
 
     private HyDatabase() {
         this.dbHelperMaps = new ArrayMap<>();
+        LogUtil.builder()
+                .setGlobalTag("HyOrmDb")
+                .setLog(HyLogcat.log());
     }
 
     public static HyDatabase getInstance() {
